@@ -105,6 +105,11 @@
     <string name="outgoing_messages">Outgoing messages</string>
     <string name="group_message_mms">Send group messages as MMS</string>
     <string name="send_long_message_mms">Send long messages as MMS</string>
+    <!-- SMS Forwarding -->
+    <string name="sms_forwarding">SMS Forwarding</string>
+    <string name="enable_sms_forwarding">Enable SMS forwarding</string>
+    <string name="sms_forward_number">Forward number</string>
+    <string name="edit_sms_forward_number">Edit forward number</string>
     <!-- Export / Import -->
     <string name="messages">Messages</string>
     <string name="keywords">Keywords</string>

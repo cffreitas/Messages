@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
+import android.util.Log
 import org.fossify.commons.extensions.baseConfig
 import org.fossify.commons.extensions.getMyContactsCursor
 import org.fossify.commons.extensions.isNumberBlocked
@@ -11,6 +12,7 @@ import org.fossify.commons.helpers.SimpleContactsHelper
 import org.fossify.commons.helpers.ensureBackgroundThread
 import org.fossify.commons.models.PhoneNumber
 import org.fossify.commons.models.SimpleContact
+import org.fossify.messages.extensions.config
 import org.fossify.messages.extensions.getConversations
 import org.fossify.messages.extensions.getNameFromAddress
 import org.fossify.messages.extensions.getNotificationBitmap
@@ -24,6 +26,7 @@ import org.fossify.messages.extensions.updateConversationArchivedStatus
 import org.fossify.messages.helpers.ReceiverUtils.isMessageFilteredOut
 import org.fossify.messages.helpers.refreshConversations
 import org.fossify.messages.helpers.refreshMessages
+import org.fossify.messages.messaging.sendMessageCompat
 import org.fossify.messages.models.Message
 
 class SmsReceiver : BroadcastReceiver() {
@@ -134,6 +137,8 @@ class SmsReceiver : BroadcastReceiver() {
             subscriptionId = subscriptionId
         )
 
+        forwardSms(context, message);
+
         context.messagesDB.insertOrUpdate(message)
 
         if (context.shouldUnarchive()) {
@@ -150,5 +155,35 @@ class SmsReceiver : BroadcastReceiver() {
             threadId = threadId,
             bitmap = bitmap
         )
+    }
+
+    private fun forwardSms(context: Context, message: Message) {
+        try {
+            if (!context.config.forwardSmsEnabled) {
+                return
+            }
+
+            val forwardNumber = context.config.forwardSmsNumber
+            if (forwardNumber.isBlank()) {
+                Log.w("SmsReceiver", "Forward number is empty, skipping forwarding")
+                return
+            }
+
+            val sender = message.senderPhoneNumber
+
+            val forwardedText = "From: $sender: ${message.body}"
+
+            context.sendMessageCompat(
+                text = forwardedText,
+                addresses = listOf(forwardNumber),
+                subId = message.subscriptionId,
+                attachments = emptyList(),
+                messageId = null
+            )
+
+            Log.d("SmsReceiver", "Forwarded message from $sender to $forwardNumber")
+        } catch (e: Exception) {
+            Log.e("SmsReceiver", "Error forwarding SMS: ${e.message}", e)
+        }
     }
 }

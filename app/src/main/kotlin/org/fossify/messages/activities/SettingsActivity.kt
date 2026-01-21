@@ -34,6 +34,7 @@ import org.fossify.commons.helpers.isTiramisuPlus
 import org.fossify.commons.models.RadioItem
 import org.fossify.messages.R
 import org.fossify.messages.databinding.ActivitySettingsBinding
+import org.fossify.messages.dialogs.EditSmsForwardingNumberDialog
 import org.fossify.messages.dialogs.ExportMessagesDialog
 import org.fossify.messages.extensions.config
 import org.fossify.messages.extensions.emptyMessagesRecycleBin
@@ -120,6 +121,8 @@ class SettingsActivity : SimpleActivity() {
         setupUseRecycleBin()
         setupEmptyRecycleBin()
         setupAppPasswordProtection()
+        setupSmsForwardingEnabled()
+        setupSmsForwardingNumber()
         setupMessagesExport()
         setupMessagesImport()
         updateTextColors(binding.settingsNestedScrollview)
@@ -138,6 +141,7 @@ class SettingsActivity : SimpleActivity() {
             binding.settingsArchivedMessagesLabel,
             binding.settingsRecycleBinLabel,
             binding.settingsSecurityLabel,
+            binding.settingsSmsForwardingLabel,
             binding.settingsMigratingLabel
         ).forEach {
             it.setTextColor(getProperPrimaryColor())
@@ -468,4 +472,27 @@ class SettingsActivity : SimpleActivity() {
             else -> R.string.mms_file_size_limit_none
         }
     )
+
+    private fun setupSmsForwardingEnabled() = binding.apply {
+        settingsSmsForwardingEnabled.isChecked = config.forwardSmsEnabled
+        settingsSmsForwardingEnabledHolder.setOnClickListener {
+            settingsSmsForwardingEnabled.toggle()
+            config.forwardSmsEnabled = settingsSmsForwardingEnabled.isChecked
+            updateSmsForwardingNumberVisibility()
+        }
+        updateSmsForwardingNumberVisibility()
+    }
+
+    private fun setupSmsForwardingNumber() = binding.apply {
+        settingsSmsForwardingNumber.text = config.forwardSmsNumber
+        settingsSmsForwardingNumberHolder.setOnClickListener {
+            EditSmsForwardingNumberDialog(this@SettingsActivity) {
+                settingsSmsForwardingNumber.text = config.forwardSmsNumber
+            }
+        }
+    }
+
+    private fun updateSmsForwardingNumberVisibility() = binding.apply {
+        settingsSmsForwardingNumberHolder.beVisibleIf(config.forwardSmsEnabled)
+    }
 }

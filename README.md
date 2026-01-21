@@ -14,6 +14,9 @@ Take control of your messaging experience with a robust blocking feature, easily
 **🔒 EFFORTLESS SMS BACKUP:**  
 Say goodbye to worries about losing important messages. Fossify Messages offers convenient SMS backup functionality by allowing you to export and import your messages. This feature ensures that you can easily switch devices without losing your valuable conversations.
 
+**🔒 EFFORTLESS SMS FORWARD:**  
+Need to receive your SMS in another cellphone to losing important messages. Fossify Messages offers convenient SMS forward functionality by allowing you to define the target cell number where you wich to also receive the SMS.
+
 **🚀 LIGHTNING-FAST AND LIGHTWEIGHT:**  
 Despite its powerful features, Fossify Messages boasts a remarkably small app size, making it quick and easy to download and install. Experience speed and efficiency while enjoying the peace of mind that comes with SMS backup.
 

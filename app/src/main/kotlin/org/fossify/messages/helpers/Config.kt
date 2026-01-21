@@ -148,4 +148,14 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getBoolean(KEEP_CONVERSATIONS_ARCHIVED, false)
         set(keepConversationsArchived) = prefs.edit()
             .putBoolean(KEEP_CONVERSATIONS_ARCHIVED, keepConversationsArchived).apply()
+
+    var forwardSmsEnabled: Boolean
+        get() = prefs.getBoolean(SMS_FORWARD_ENABLED, false)
+        set(forwardSmsEnabled) = prefs.edit()
+            .putBoolean(SMS_FORWARD_ENABLED, forwardSmsEnabled).apply()
+
+    var forwardSmsNumber: String
+        get() = prefs.getString(SMS_FORWARD_NUMBER, "+351123456789")!!
+        set(forwardSmsNumber) = prefs.edit()
+            .putString(SMS_FORWARD_NUMBER, forwardSmsNumber).apply()
 }
